@@ -2,8 +2,9 @@
 
 namespace ft
 {
-	template <typename T>
-	class map{
+	template <typename T1, typename T2>
+	class pair{
+		pair(T1, T2);
 
    }; 
 }
