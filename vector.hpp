@@ -20,7 +20,7 @@ namespace ft {
 			explicit vector(size_type count, const T& value){
 				std::allocator<T> a;
 				data = a.allocate(count);
-				for(int i = 0; i < count; i++) {
+				for(size_type i = 0; i < count; i++) {
 					data[i] = value;
 				}
 			}
