@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <iostream>
+#include "iterator/iterator.hpp"
 
 typedef size_t size_type;	
 
@@ -12,22 +13,24 @@ namespace ft {
 		private:
 			T *dataArray;
 			std::allocator<T> alloc;
-			size_type dataSize;//TODO check if this is needed. Also make sure to update properly, e.g. push back. Should this be the actual size, or the capacity??
+			size_type dataSize;
+			size_type dataCapacity;
+			// struct Iterator {//implement iterator per container
+			// 	typedef typename T value_type;
+			// 	typedef typename ptrdiff_t difference_type;
+			// 	typedef typename random_access_iterator_tag iterator_category;//TODO is this the right tag to go>>
+			// 	typedef typename T* pointer;
+			// 	typedef typename T& reference;
 
-			struct Iterator {//implement iterator per container
-				typedef typename T value_type;
-				typedef typename ptrdiff_t difference_type;
-				typedef typename random_access_iterator_tag iterator_category;//TODO is this the right tag to go>>
-				typedef typename T* pointer;
-				typedef typename T& reference;
+			// 	Iterator(pointer inputPtr): ptr(inputPtr) {}
 
-				Iterator(pointer inputPtr): ptr(inputPtr) {}
-
-				private:
-					pointer ptr;
-			}
+			// 	private:
+			// 		pointer ptr;
+			// }
 		
 		public:
+			typedef Iterator<T> iterator;
+
 		/*******Member function*******/	
 			/******constructor******/
 			vector() {dataSize = 0;}
@@ -83,6 +86,45 @@ namespace ft {
 				return dataArray;
 			}
 
+
+
+			/******Iterator******/
+			iterator begin() {
+				iterator begin(dataArray);
+				return begin;
+			}
+			// reverse_iterator rbegin()
+
+			//TODO for push_back, you also check if the size is zero then enlarge the size to 1
+
+
+			/******Modifiers******/
+			void clear() {
+				dataSize = 0;
+				dataCapacity = 0;
+				alloc.deallocate(dataArray, dataCapacity);
+			}
+
+			void push_back(const T& value) {
+				if(dataSize == 0){
+					dataArray = alloc.allocate(1);
+					dataCapacity = 1;
+				}
+				else if(dataSize == dataCapacity) {
+					T *newData = alloc.allocate(2 * dataSize);
+					for(size_type i = 0; i < dataSize; i++) {
+						newData[i] = dataArray[i];
+					}
+					dataCapacity = dataSize * 2;
+				}
+				dataArray[dataSize] = value;
+				dataSize++;
+			}
+
+			// Iterator insert(Iterator pos, const T& value) {
+
+			// }
+			// void insert( iterator pos, size_type count, const T& value ) {}
 		// friend:
 
 
