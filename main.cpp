@@ -21,6 +21,12 @@ int main() {
 		std::vector<int>::iterator iter2 = 1 + iter1;
 		std::cout << *iter2 << std::endl;
 
+		std::vector<int>::iterator iter4;
+		iter4.push_back(1);
+		iter4.push_back(2);
+		
+
+
 
 		std::cout << "this is my beautify ft::vector\n";
 		ft::vector<int>::iterator iter;
