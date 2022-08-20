@@ -94,7 +94,8 @@ namespace ft {
 			// reverse_iterator rbegin()
 
 			iterator end() const {
-				return Iterator(dataArray + dataSize);
+				iterator end(dataArray + dataSize);
+				return end;
 			}
 
 			/******Capacity******/
