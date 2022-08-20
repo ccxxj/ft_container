@@ -39,9 +39,9 @@ namespace ft {
 			~vector() {
 				alloc.deallocate(dataArray, dataCapacity);
 			}
-			vector& operator=(const vector& other) {
+			// vector& operator=(const vector& other) {
 
-			}
+			// }
 			void assign(size_type count, const T& value) {
 				if(count != dataCapacity) {
 					alloc.deallocate(dataArray, dataCapacity);//TODO should I check the size see if needed to deallocate?
@@ -116,7 +116,7 @@ namespace ft {
 					throw std::length_error("the new_cap is longer than max_cap\n");
 				else if(new_cap > dataCapacity) {
 					T* newArray = alloc.allocate(new_cap);
-					for(int i = 0; i < dataSize; i++)
+					for(size_type i = 0; i < dataSize; i++)
 						newArray[i] = dataArray[i];
 					alloc.deallocate(dataArray, dataCapacity);
 					dataArray = newArray;
