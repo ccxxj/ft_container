@@ -23,7 +23,7 @@ namespace ft{
 		}
 		bool operator == (Iterator other) {return other.ptr == ptr;}
 		bool operator != (Iterator other) {return !(*this == other);}
-		reference operator * () {return *ptr;}
+		reference operator * () const {return *ptr;}
 		reference operator -> () {return ptr;}
 		Iterator operator++() {return ++ptr;}//pre increase
 		Iterator operator++(int) {//post increase
