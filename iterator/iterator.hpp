@@ -38,9 +38,8 @@ namespace ft{
 			return temp;
 		}
 		Iterator operator + (int a) {return ptr + a;}
-		// reference operator (int) + (Iterator a) {return a;}
 		Iterator operator - (int a) {return ptr - a;}
-		long operator - (Iterator& other){return (ptr - other.ptr);}
+		long operator - (Iterator& other){return ptr - other.ptr;}
 		Iterator operator += (const std::ptrdiff_t offset) {
 			ptr += offset;
 			return (*this);
@@ -50,20 +49,10 @@ namespace ft{
 		bool operator <= (Iterator& other){return (ptr <= other.ptr);}
 		bool operator >= (Iterator& other){return (ptr >= other.ptr);}
 
-
-	// friend:
-		// const Iterator operator+(const std::ptrdiff_t offset, Iterator out) {
 		friend const Iterator operator+(const int offset, Iterator out) {
 			out += offset;
 			return out;
 		}
-		// friend const Iterator operator+( Iterator out, const int offset) {
-		// 	out += offset;
-		// 	return out;
-		// }
-
-
-
 	};
 
 }

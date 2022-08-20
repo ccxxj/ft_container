@@ -37,7 +37,7 @@ namespace ft {
 			// explicit vector(size_type count, const T& value, const Allocator& alloc = Allocator());
 			/******Others******/
 			~vector() {
-				alloc.deallocate(dataArray, dataCapacity);
+				// alloc.deallocate(dataArray, dataCapacity);
 			}
 			// vector& operator=(const vector& other) {
 
@@ -133,6 +133,23 @@ namespace ft {
 				dataSize = 0;
 				dataCapacity = 0;
 				alloc.deallocate(dataArray, dataCapacity);
+			}
+
+			iterator insert(iterator pos, const T& value) {
+				iterator end = this->end();
+				if(dataCapacity == dataSize) {
+					this->reserve(dataCapacity * 2);//TODO check if grow exponentially
+				}
+				while(end != pos) {
+					*end-- = *(end - 1);
+				}
+				*pos = value;
+				dataSize++;
+				return pos;
+			}
+
+			void insert( iterator pos, size_type count, const T& value ) {
+
 			}
 
 			void push_back(const T& value) {
