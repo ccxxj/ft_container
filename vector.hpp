@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <iostream>
+#include "iterator/iterator.hpp"
 
 typedef size_t size_type;	
 
@@ -12,26 +13,12 @@ namespace ft {
 		private:
 			T *dataArray;
 			std::allocator<T> alloc;
-			size_type dataSize;//TODO check if this is needed. Also make sure to update properly, e.g. push back. Should this be the actual size, or the capacity??
-			size_type dataCapacity;//TODO check if this is needed. Also make sure to update properly, e.g. push back. Should this be the actual size, or the capacity??
-
-			struct Iterator {//implement iterator per container
-				typedef T value_type;
-				typedef typename std::ptrdiff_t difference_type;
-				typedef typename std::random_access_iterator_tag iterator_category;//TODO is this the right tag to go>>
-				typedef T* pointer;
-				typedef T& reference;
-
-				Iterator(pointer inputPtr): ptr(inputPtr) {}
-				bool operator == (const Iterator& other) {
-					return this->ptr == other.ptr;
-				}
-
-				private:
-					pointer ptr;
-			};
+			size_type dataSize;
+			size_type dataCapacity;
 		
 		public:
+			typedef Iterator<T> iterator;
+
 		/*******Member function*******/	
 			/******constructor******/
 			vector() {
@@ -94,13 +81,19 @@ namespace ft {
 				return dataArray;
 			}
 
-			/******Iterators******/
-			Iterator begin() const {//TODO how to remove const, or use cbegin for empty
-			// Iterator begin() {
-				return Iterator(dataArray);
-			}
 
-			Iterator end() const {
+			// Iterator insert(Iterator pos, const T& value) {
+
+			// }
+			// void insert( iterator pos, size_type count, const T& value ) {}
+			/******Iterators******/
+			iterator begin() {
+				iterator begin(dataArray);
+				return begin;
+			}
+			// reverse_iterator rbegin()
+
+			iterator end() const {
 				return Iterator(dataArray + dataSize);
 			}
 
@@ -110,7 +103,7 @@ namespace ft {
 			}
 
 			size_type size() const {
-				return dataSize;//TODO is this the correct way? according to cpp, std::distance(end() - begin())
+				return dataSize;
 			}
 
 			size_type max_size() const {
@@ -133,17 +126,26 @@ namespace ft {
 			size_type capacity() const {
 				return dataCapacity;
 			}
-
-			/******Modifiers******/
-			void push_back(const T& value) {
-				if(dataCapacity == dataSize)
-					this->reserve(2 * dataCapacity);
-				dataSize++;
-				dataArray[dataSize - 1] = value;
-			}
 			
-		// friend:
+			/******Modifiers******/
+			void clear() {
+				dataSize = 0;
+				dataCapacity = 0;
+				alloc.deallocate(dataArray, dataCapacity);
+			}
 
+			void push_back(const T& value) {
+				if(dataSize == 0){
+					dataArray = alloc.allocate(1);
+					dataCapacity = 1;
+				}
+				else if(dataSize == dataCapacity) {
+					if(dataCapacity == dataSize)
+						this->reserve(2 * dataCapacity);
+				}
+				dataArray[dataSize] = value;
+				dataSize++;
+			}
 
 	};
 }
