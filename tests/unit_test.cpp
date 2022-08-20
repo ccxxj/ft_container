@@ -43,7 +43,6 @@ namespace tests {
 			iter1 = a.begin();
 			iter2 = iter1 + 1;
 			iter3 = iter2 + 1;
-			
 			stdIter1 = standard.begin();
 			stdIter2 = stdIter1 + 1;
 			stdIter3 = stdIter2 + 1;
