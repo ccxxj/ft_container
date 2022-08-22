@@ -71,5 +71,19 @@ namespace tests {
 			CHECK(ftvector.capacity() == stdvector.capacity());
 		}
 	}
+
+	TEST_CASE ("Test ft::vectors", "[modifiers]"){
+		ft::vector<int> ftvector;
+		std::vector<int> stdvector;
+		for(int i = 0; i < 8; i++)
+			ftvector.push_back(i);
+		for(int i = 0; i < 8; i++)
+			stdvector.push_back(i);
+		ft::vector<int>::iterator iter = ftvector.begin();
+		std::vector<int>::iterator stdIter = stdvector.begin();
+		ft::vector<int>::iterator result =  ftvector.insert(iter, 100);
+		std::vector<int>::iterator stdResult =  stdvector.insert(stdIter, 100);
+		CHECK(*result == *stdResult);
+	}
 	
 }

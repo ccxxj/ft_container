@@ -39,7 +39,7 @@ namespace ft{
 		}
 		Iterator operator + (int a) {return ptr + a;}
 		Iterator operator - (int a) {return ptr - a;}
-		long operator - (Iterator& other){return ptr - other.ptr;}
+		std::ptrdiff_t operator - (Iterator& other){return ptr - other.ptr;}
 		Iterator operator += (const std::ptrdiff_t offset) {
 			ptr += offset;
 			return (*this);

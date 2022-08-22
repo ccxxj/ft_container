@@ -43,7 +43,7 @@ namespace ft {
 
 			// }
 			void assign(size_type count, const T& value) {
-				if(count != dataCapacity) {
+				if(count != dataCapacity) {//reserve
 					alloc.deallocate(dataArray, dataCapacity);//TODO should I check the size see if needed to deallocate?
 					dataArray = alloc.allocate(count);
 					dataSize = count;
@@ -136,21 +136,32 @@ namespace ft {
 			}
 
 			iterator insert(iterator pos, const T& value) {
-				iterator end = this->end();
 				if(dataCapacity == dataSize) {
-					this->reserve(dataCapacity * 2);//TODO check if grow exponentially
+					T *newdata = alloc.allocate(dataCapacity * 2);
+					std::ptrdiff_t distance = -(this->begin()-pos);
+					for(long i = 0; i < distance; i++) {
+						newdata[i] = dataArray[i];
+					}
+					distance = (*this).end() - pos;
+					for(long i = 0; i < distance; i++) {
+						newdata[pos - this->begin() + i + 1] = dataArray[pos - (*this).begin() + i];
+					}
+					newdata[pos - this->begin()] = value;
+					alloc.deallocate(dataArray, dataCapacity);
+					dataArray = newdata;
+					dataCapacity = dataCapacity * 2;
 				}
-				while(end != pos) {
-					*end-- = *(end - 1);
+				else {
+					std::copy(pos, (*this).end(), pos+1);
+					*pos = value;
 				}
-				*pos = value;
 				dataSize++;
 				return pos;
 			}
 
-			void insert( iterator pos, size_type count, const T& value ) {
+			// void insert( iterator pos, size_type count, const T& value ) {
 
-			}
+			// }
 
 			void push_back(const T& value) {
 				if(dataSize == 0){
