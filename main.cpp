@@ -25,18 +25,32 @@ int main() {
 
 		std::cout << "this is my beautify ft::vector\n";
 		ft::vector<int>::iterator iter;
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < 7; i++)
 			a.push_back(i);
 		iter = a.begin();
+		iter++;
+		ft::vector<int>::iterator result = a.insert(iter, 100);
+		std::cout <<"result is "<< *result << std::endl;
+		a.print();
+		a.insert(result,2, 300);
+		a.print();
+		ft::vector<int> input(3, 1000);
+		ft::vector<int>::iterator first = input.begin();
+		ft::vector<int>::iterator last = input.end();
+		a.insert(result, first, last);
+		a.print();
+
+
+
+
 		// std::cout << *iter << std::endl;
 		// std::cout << *iter + 1 << std::endl;
-		std::cout << "print here " << *iter++ << std::endl;
-		std::cout << (*iter) << std::endl;
-		
-		std::cout << *(++iter) << std::endl;
-		std::cout << (*iter) << std::endl;
-		ft::vector<int>::iterator iter3 = 1 + iter;
-		std::cout << *iter3 << std::endl;
+		// std::cout << "print here " << *iter++ << std::endl;
+		// std::cout << (*iter) << std::endl;
+		// std::cout << *(++iter) << std::endl;
+		// std::cout << (*iter) << std::endl;
+		// ft::vector<int>::iterator iter3 = 1 + iter;
+		// std::cout << *iter3 << std::endl;
 
 
 		// *iter = 5;

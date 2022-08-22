@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <iostream>
+#include <stdio.h>
 #include "iterator/iterator.hpp"
 
 typedef size_t size_type;	
@@ -15,6 +16,29 @@ namespace ft {
 			std::allocator<T> alloc;
 			size_type dataSize;
 			size_type dataCapacity;
+
+			void back_copy(Iterator<T> inputBegin, Iterator<T> inputEnd, Iterator<T> result) {
+
+				size_type indexEnd = inputEnd - inputBegin;
+				for(int i = indexEnd - 1; i >= 0; i--) {
+					*(result + i) = *(inputBegin + i);
+				}
+			}
+
+			Iterator<T> unit_insert(Iterator<T> pos, size_type count, const T& value) {
+				std::ptrdiff_t position = pos - this->begin();
+				if(dataCapacity == dataSize)
+					this->reserve(dataCapacity + count);
+				print();
+				pos = this->begin() + position;
+				back_copy(pos, this->end(), pos + count);
+				for(int i = 0; i < count; i++) {
+					*pos = value;
+					pos++;
+				}
+				dataSize += count;
+				return pos;
+			}
 		
 		public:
 			typedef Iterator<T> iterator;
@@ -136,32 +160,35 @@ namespace ft {
 			}
 
 			iterator insert(iterator pos, const T& value) {
-				if(dataCapacity == dataSize) {
-					T *newdata = alloc.allocate(dataCapacity * 2);
-					std::ptrdiff_t distance = -(this->begin()-pos);
-					for(long i = 0; i < distance; i++) {
-						newdata[i] = dataArray[i];
-					}
-					distance = (*this).end() - pos;
-					for(long i = 0; i < distance; i++) {
-						newdata[pos - this->begin() + i + 1] = dataArray[pos - (*this).begin() + i];
-					}
-					newdata[pos - this->begin()] = value;
-					alloc.deallocate(dataArray, dataCapacity);
-					dataArray = newdata;
-					dataCapacity = dataCapacity * 2;
-				}
-				else {
-					std::copy(pos, (*this).end(), pos+1);
-					*pos = value;
-				}
-				dataSize++;
-				return pos;
+				return unit_insert(pos, 1, value);
 			}
 
-			// void insert( iterator pos, size_type count, const T& value ) {
+			void insert( iterator pos, size_type count, const T& value ) {
+				unit_insert(pos, count, value);
+			}
 
-			// }
+			template <class InputIterator>
+    		void insert (iterator position, InputIterator first, InputIterator last) {
+				size_type count = last - first;
+				std::ptrdiff_t index = position - this->begin();
+				if(dataCapacity == dataSize)
+					this->reserve(dataCapacity + count);
+				position = this->begin() + index;
+				back_copy(position, this->end(), position + count);
+				while(first != last) {
+					*position = *first;
+					position++;
+					first++;
+				}
+				dataSize += count;
+			}
+
+			void print() {
+				for(size_type i = 0; i < dataSize; i++) {
+					std::cout << dataArray[i] << " ";
+				}
+				std::cout << std::endl;
+			}
 
 			void push_back(const T& value) {
 				if(dataSize == 0){
@@ -176,5 +203,9 @@ namespace ft {
 				dataSize++;
 			}
 
+
+
 	};
+
+	
 }
