@@ -37,7 +37,7 @@ int main() {
 		ft::vector<int> input(3, 1000);
 		ft::vector<int>::iterator first = input.begin();
 		ft::vector<int>::iterator last = input.end();
-		a.insert(result, first, last);
+		a.insert(a.begin(), first, last);
 		a.print();
 
 

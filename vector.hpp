@@ -169,10 +169,14 @@ namespace ft {
 
 			template <class InputIterator>
     		void insert (iterator position, InputIterator first, InputIterator last) {
+    		// void insert (iterator position, iterator first, iterator last) {
 				size_type count = last - first;
 				std::ptrdiff_t index = position - this->begin();
+				// long index = position - this->begin();
+				std::cout << "index " << index << std::endl;
 				if(dataCapacity == dataSize)
 					this->reserve(dataCapacity + count);
+				print();
 				position = this->begin() + index;
 				back_copy(position, this->end(), position + count);
 				while(first != last) {
