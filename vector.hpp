@@ -4,6 +4,7 @@
 #include <iostream>
 #include <stdio.h>
 #include "iterator/iterator.hpp"
+#include "std_functions/enable_if.hpp"
 
 typedef size_t size_type;	
 
@@ -55,7 +56,8 @@ namespace ft {
 				dataCapacity = count;
 				dataArray = alloc.allocate(count);
 				for(size_type i = 0; i < count; i++) {
-					dataArray[i] = value;
+					alloc.construct(dataArray + i, value);//use construct to construct object to the uninitialzed memory space
+					// dataArray[i] = value;
 				}
 			}
 			// explicit vector(size_type count, const T& value, const Allocator& alloc = Allocator());
@@ -63,9 +65,12 @@ namespace ft {
 			~vector() {
 				// alloc.deallocate(dataArray, dataCapacity);
 			}
-			// vector& operator=(const vector& other) {
+			vector& operator=(const vector& other) {
+				if(dataArray != other.dataArray)//TODO is this really making sense
+					assign(other.begin(), other.end());
+				return *this;
+			}
 
-			// }
 			void assign(size_type count, const T& value) {
 				if(count != dataCapacity) {//reserve
 					alloc.deallocate(dataArray, dataCapacity);//TODO should I check the size see if needed to deallocate?
@@ -74,9 +79,26 @@ namespace ft {
 					dataCapacity = count;
 				}
 				for(size_type i = 0; i < count; i++) {
-					dataArray[i] = value;
+					alloc.construct(dataArray + i, value);//use construct to construct object to the uninitialzed memory space
+					// dataArray[i] = value;
 				}
 			}
+			template< class InputIt >
+			void assign(InputIt first, InputIt last) {
+				for(int i = 0; i < dataSize; i++) {
+					alloc.destroy(dataArray + i);
+				}
+				alloc.deallocate(dataArray, dataCapacity);
+				size_type count = last - first;
+				dataArray = alloc.allocate(count);
+				int i = 0;
+				for(InputIt temp = first; temp != last; temp++) {
+					alloc.construct(dataArray + i++, *temp);
+				}
+				dataSize = count;
+				dataCapacity = count;
+			}
+
 			std::allocator<T> get_allocator() const {
 				return alloc;
 			}
@@ -111,7 +133,7 @@ namespace ft {
 			// }
 			// void insert( iterator pos, size_type count, const T& value ) {}
 			/******Iterators******/
-			iterator begin() {
+			iterator begin() const {
 				iterator begin(dataArray);
 				return begin;
 			}
@@ -168,12 +190,10 @@ namespace ft {
 			}
 
 			template <class InputIterator>
-    		void insert (iterator position, InputIterator first, InputIterator last) {
-    		// void insert (iterator position, iterator first, iterator last) {
+			//use enable_if to differentiate the inputIterator to the first insert function
+    		void insert (iterator position, InputIterator first, InputIterator last, typename enable_if<!std::is_integral<InputIterator>::value, bool>::type* = nullptr) {
 				size_type count = last - first;
 				std::ptrdiff_t index = position - this->begin();
-				// long index = position - this->begin();
-				std::cout << "index " << index << std::endl;
 				if(dataCapacity == dataSize)
 					this->reserve(dataCapacity + count);
 				print();

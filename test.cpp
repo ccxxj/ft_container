@@ -12,13 +12,19 @@ int main() {
 	// 	cout << *a.end() << endl;
 	// }
 
-	vector<int> a(5, 3);
-	vector<int> c(5, 3);
-	vector<string> b;
-	b.push_back("hello");
-	b.push_back("wolrd");
-	vector<int>::iterator first = a.begin();
-	first++;
+	// vector<int> a(5, 3);
+	// vector<int> c(5, 3);
+	// vector<string> b;
+	// b.push_back("hello");
+	// b.push_back("wolrd");
+	// vector<int>::iterator first = a.begin();
+	// first++;
 	// a.insert(first, c.begin(), c.end());
+
+	vector<int> a(5, 3);
+	vector<int> b(5, 4);
+	b = a;
+	std::cout << a.capacity() << endl;
+
 	
 }
