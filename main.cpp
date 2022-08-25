@@ -30,7 +30,7 @@ int main() {
 		iter = a.begin();
 		iter++;
 		ft::vector<int>::iterator result = a.insert(iter, 100);
-		std::cout <<"result is "<< *result << std::endl;
+			std::cout <<"result is "<< *result << std::endl;
 		a.print();
 		a.insert(result,2, 300);
 		// a.print();
@@ -44,17 +44,38 @@ int main() {
 		a.insert(a.begin(), first, last);
 		a.print();
 
-		std::cout << "test assign template\n";
+		std::cout << "******test assign template*****\n";
 		ft::vector<int> test1(3, 5);
 		ft::vector<int> test2(4, 6);
-		// test2.print();
 
 		// test1.assign(test2.begin(), test2.end());
 		test1.print();
+		test2.print();
 
-		test1 = test2;
+		// test1 = test2;
+		test2 = test1;
 		test1.print();
 		test2.print();
+		std::cout << "size " << test1.size() << " capacity " << test1.capacity() << std::endl;
+		std::cout << "size " << test2.size() << " capacity " << test2.capacity() << std::endl;
+
+		std::cout << "****test swap****\n";
+		ft::vector<int> swap1(3, 1000);
+		ft::vector<int> swap2(4, 200);
+		ft::vector<int>::iterator first1 = swap1.begin();
+		ft::vector<int>::iterator first2 = swap2.begin();
+		swap1.print();
+		swap2.print();
+		std::cout << "size " << swap1.size() << " capacity " << swap1.capacity() << " first " << *first1 << std::endl;
+		std::cout << "size " << swap2.size() << " capacity " << swap2.capacity() << " first " << *first2 << std::endl;
+		// swap2 = swap1;
+		swap1.swap(swap2);
+		swap1.print();
+		swap2.print();
+		std::cout << "size " << swap1.size() << " capacity " << swap1.capacity() << " first " << *first1 << std::endl;
+		std::cout << "size " << swap2.size() << " capacity " << swap2.capacity() << " first " << *first2 << std::endl;
+
+
 
 
 

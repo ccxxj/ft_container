@@ -33,7 +33,7 @@ namespace ft {
 				print();
 				pos = this->begin() + position;
 				back_copy(pos, this->end(), pos + count);
-				for(int i = 0; i < count; i++) {
+				for(size_type i = 0; i < count; i++) {
 					*pos = value;
 					pos++;
 				}
@@ -57,7 +57,24 @@ namespace ft {
 				dataArray = alloc.allocate(count);
 				for(size_type i = 0; i < count; i++) {
 					alloc.construct(dataArray + i, value);//use construct to construct object to the uninitialzed memory space
-					// dataArray[i] = value;
+				}
+			}
+
+			vector(const vector& other) {
+				vector temp(other.begin(), other.end());
+				*this = temp;
+			}
+
+			template< class InputIt >
+			vector(InputIt first, InputIt last, typename enable_if<!std::is_integral<InputIt>::value, bool>::type* = nullptr){
+				dataSize = last - first;
+				if(dataSize > 0) {
+					dataArray = alloc.allocate(dataCapacity);
+					dataCapacity = dataSize;
+					for(size_type i = 0; i < dataSize; i++) {
+						alloc.construct(dataArray + i, *first);
+						first++;
+					}
 				}
 			}
 			// explicit vector(size_type count, const T& value, const Allocator& alloc = Allocator());
@@ -66,6 +83,7 @@ namespace ft {
 				// alloc.deallocate(dataArray, dataCapacity);
 			}
 			vector& operator=(const vector& other) {
+				std::cout << "calling = here\n";
 				if(dataArray != other.dataArray)//TODO is this really making sense
 					assign(other.begin(), other.end());
 				return *this;
@@ -73,7 +91,11 @@ namespace ft {
 
 			void assign(size_type count, const T& value) {
 				if(count != dataCapacity) {//reserve
-					alloc.deallocate(dataArray, dataCapacity);//TODO should I check the size see if needed to deallocate?
+					for(size_type i = 0; i < dataSize; i++) {
+						alloc.destroy(dataArray + i);
+					}
+					if(dataCapacity > 0)
+						alloc.deallocate(dataArray, dataCapacity);//TODO should I check the size see if needed to deallocate?
 					dataArray = alloc.allocate(count);
 					dataSize = count;
 					dataCapacity = count;
@@ -85,10 +107,11 @@ namespace ft {
 			}
 			template< class InputIt >
 			void assign(InputIt first, InputIt last) {
-				for(int i = 0; i < dataSize; i++) {
+				for(size_type i = 0; i < dataSize; i++) {
 					alloc.destroy(dataArray + i);
 				}
-				alloc.deallocate(dataArray, dataCapacity);
+				if(dataCapacity > 0)
+					alloc.deallocate(dataArray, dataCapacity);
 				size_type count = last - first;
 				dataArray = alloc.allocate(count);
 				int i = 0;
@@ -164,7 +187,8 @@ namespace ft {
 					T* newArray = alloc.allocate(new_cap);
 					for(size_type i = 0; i < dataSize; i++)
 						newArray[i] = dataArray[i];
-					alloc.deallocate(dataArray, dataCapacity);
+					if(dataCapacity > 0)
+						alloc.deallocate(dataArray, dataCapacity);
 					dataArray = newArray;
 					dataCapacity = new_cap;
  				}
@@ -178,7 +202,8 @@ namespace ft {
 			void clear() {
 				dataSize = 0;
 				dataCapacity = 0;
-				alloc.deallocate(dataArray, dataCapacity);
+				if(dataCapacity > 0)
+					alloc.deallocate(dataArray, dataCapacity);
 			}
 
 			iterator insert(iterator pos, const T& value) {
@@ -227,7 +252,17 @@ namespace ft {
 				dataSize++;
 			}
 
-
+			void swap(vector& other) {
+				T* temp = other.dataArray;
+				size_type size = other.size();
+				size_type capacity = other.capacity();
+				other.dataArray = dataArray;
+				other.dataSize = dataSize;
+				other.dataCapacity = dataCapacity;
+				dataArray = temp;
+				dataSize = size;
+				dataCapacity = capacity;
+			}
 
 	};
 
